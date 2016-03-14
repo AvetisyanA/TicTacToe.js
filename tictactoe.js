@@ -16,10 +16,11 @@ function Board() {
   }
 
   function isEmpty(i, j) {
-    return get(i, j) === "";
+    return get(i, j) == "";
   }
 
   function get(i, j) {
+    // console.log(board);
     return board[i][j];
   }
 
@@ -187,6 +188,18 @@ function Game() {
     return weight;
   }
 
+  function isGameOver() {
+    for (var i = 0; i < 3; ++i) {
+      for (var j = 0; j < 3; ++j) {
+        if (board.isEmpty(i, j)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   function printBoard() {
     for (var i = 0; i < 3; ++i) {
       var art = "";
@@ -207,37 +220,51 @@ function Game() {
   this.putO = putO;
   this.calculateWeight = calculateWeight;
   this.printBoard = printBoard;
+  this.isGameOver = isGameOver;
 }
 
 var game = new Game();
-game.putX(0, 1);
-game.putX(1, 2);
-// game.putX(2, 2);
-game.putO(2, 0);
-game.putO(2, 1);
 console.log("Start board:")
 game.printBoard();
+console.log("Enter row and column");
 
-var n, m;
-var weight = 0;
+var stdin = process.openStdin();
+stdin.addListener("data", function(d) {
+  var inputString = d.toString().trim();
+  var row = inputString.split(" ")[0];
+  var column = inputString.split(" ")[1];
+  var set = game.putX(row, column);
 
-for (var i = 0; i < 3; ++i) {
-  for (var j = 0; j < 3; ++j) {
-    var reset = game.putO(i, j);
-    var newWeight = game.calculateWeight("O");
-    if (newWeight > weight) {
-      weight = newWeight;
-      n = i;
-      m = j;
-    }
+  if (!set) {
+    console.log("Row and column were not free. Enter new row and column!");
+    return;
+  }
 
-    if (reset) {
-      game.reset(i, j);
+  var n, m;
+  var weight;
+  for (var i = 0; i < 3; ++i) {
+    for (var j = 0; j < 3; ++j) {
+      var reset = game.putO(i, j);
+      var newWeight = game.calculateWeight("O");
+      if (typeof (weight) == "undefined" || newWeight > weight) {
+        weight = newWeight;
+        n = i;
+        m = j;
+      }
+
+      if (reset) {
+        game.reset(i, j);
+      }
     }
   }
-}
 
-game.putO(n, m);
-console.log("Final board:")
+  game.putO(n, m);
+  game.printBoard();
+  console.log("");
 
-game.printBoard();
+  if (game.isGameOver()) {
+    console.log("Game over!!!");
+    process.exit();
+  }
+
+});
