@@ -212,9 +212,10 @@ function Game() {
 var game = new Game();
 game.putX(0, 1);
 game.putX(1, 2);
-game.putX(2, 2);
+// game.putX(2, 2);
 game.putO(2, 0);
 game.putO(2, 1);
+console.log("Start board:")
 game.printBoard();
 
 var n, m;
@@ -225,8 +226,6 @@ for (var i = 0; i < 3; ++i) {
     var reset = game.putO(i, j);
     var newWeight = game.calculateWeight("O");
     if (newWeight > weight) {
-      // console.log ("i = " + i + " j = " + j);
-      // console.log ("weight = " + weight + " newWeight = " + newWeight);
       weight = newWeight;
       n = i;
       m = j;
@@ -239,4 +238,6 @@ for (var i = 0; i < 3; ++i) {
 }
 
 game.putO(n, m);
+console.log("Final board:")
+
 game.printBoard();
