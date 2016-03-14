@@ -26,21 +26,37 @@ function Board() {
   function set(i, j, value) {
     board[i][j] = value;
   }
+
+  this.clearBoard = clearBoard;
+  this.clear = clear;
+  this.isEmpty = isEmpty;
+  this.set = set;
+  this.get = get;
 }
 
 function Game() {
   var board = new Board();
 
+  function reset(i, j) {
+    board.set(i, j, "");
+  }
+
   function putX(i, j) {
     if (board.isEmpty(i, j)) {
-      board.ser(i, j, "X");
+      board.set(i, j, "X");
+      return true;
     }
+
+    return false;
   }
 
   function putO(i, j) {
     if (board.isEmpty(i, j)) {
-      board.ser(i, j, "O");
+      board.set(i, j, "O");
+      return true;
     }
+
+    return false;
   }
 
   function calculateWeight(c) {
@@ -72,13 +88,13 @@ function Game() {
         }
 
         if (board.isEmpty(j, i)) {
-          ++empty;
+          ++emptyCol;
         }
         else if (board.get(j, i) === c) {
-          ++good;
+          ++goodCol;
         }
         else {
-          ++bad;
+          ++badCol;
         }
       }
 
@@ -112,9 +128,25 @@ function Game() {
         weight += 50;
       }
       else if (bad === 2 && empty === 1) {
-        weight -= 50;
+        weight -= 10;
       }
       else if (bad === 1 && empty === 2) {
+        weight -= 2;
+      }
+
+      if (goodCol === 1 && emptyCol === 2) {
+        weight += 2;
+      }
+      else if (goodCol === 2 && emptyCol === 1) {
+        weight += 5;
+      }
+      else if (goodCol === 3) {
+        weight += 50;
+      }
+      else if (badCol === 2 && emptyCol === 1) {
+        weight -= 10;
+      }
+      else if (badCol === 1 && emptyCol === 2) {
         weight -= 2;
       }
 
@@ -130,7 +162,7 @@ function Game() {
       weight += 50;
     }
     else if (badCross === 2 && emptyCross === 1) {
-      weight -= 50;
+      weight -= 10;
     }
     else if (badCross === 1 && emptyCross === 2) {
       weight -= 2;
@@ -146,11 +178,65 @@ function Game() {
       weight += 50;
     }
     else if (badReverseCross === 2 && emptyReverseCross === 1) {
-      weight -= 50;
+      weight -= 10;
     }
     else if (badReverseCross === 1 && emptyReverseCross === 2) {
       weight -= 2;
     }
+
+    return weight;
   }
 
+  function printBoard() {
+    for (var i = 0; i < 3; ++i) {
+      var art = "";
+      for (var j = 0; j < 3; ++j) {
+        if (board.isEmpty(i, j)) {
+          art += "*" + "  ";
+        }
+        else {
+          art += board.get(i, j) + "  ";
+        }
+      }
+      console.log(art);
+    }
+  }
+
+  this.reset = reset;
+  this.putX = putX;
+  this.putO = putO;
+  this.calculateWeight = calculateWeight;
+  this.printBoard = printBoard;
 }
+
+var game = new Game();
+game.putX(0, 1);
+game.putX(1, 2);
+game.putX(2, 2);
+game.putO(2, 0);
+game.putO(2, 1);
+game.printBoard();
+
+var n, m;
+var weight = 0;
+
+for (var i = 0; i < 3; ++i) {
+  for (var j = 0; j < 3; ++j) {
+    var reset = game.putO(i, j);
+    var newWeight = game.calculateWeight("O");
+    if (newWeight > weight) {
+      // console.log ("i = " + i + " j = " + j);
+      // console.log ("weight = " + weight + " newWeight = " + newWeight);
+      weight = newWeight;
+      n = i;
+      m = j;
+    }
+
+    if (reset) {
+      game.reset(i, j);
+    }
+  }
+}
+
+game.putO(n, m);
+game.printBoard();
