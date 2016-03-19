@@ -20,7 +20,6 @@ function Board() {
   }
 
   function get(i, j) {
-    // console.log(board);
     return board[i][j];
   }
 
@@ -35,7 +34,7 @@ function Board() {
   this.get = get;
 }
 
-function Game() {
+function TicTacToe() {
   var board = new Board();
 
   function reset(i, j) {
@@ -202,16 +201,15 @@ function Game() {
 
   function printBoard() {
     for (var i = 0; i < 3; ++i) {
-      var art = "";
+      var gameLog = "";
       for (var j = 0; j < 3; ++j) {
         if (board.isEmpty(i, j)) {
-          art += "*" + "  ";
+          gameLog += "*" + "  ";
         }
         else {
-          art += board.get(i, j) + "  ";
+          gameLog += board.get(i, j) + "  ";
         }
       }
-      console.log(art);
     }
   }
 
@@ -223,48 +221,43 @@ function Game() {
   this.isGameOver = isGameOver;
 }
 
-var game = new Game();
-console.log("Start board:")
-game.printBoard();
-console.log("Enter row and column");
-
-var stdin = process.openStdin();
-stdin.addListener("data", function(d) {
-  var inputString = d.toString().trim();
-  var row = inputString.split(" ")[0];
-  var column = inputString.split(" ")[1];
-  var set = game.putX(row, column);
-
-  if (!set) {
-    console.log("Row and column were not free. Enter new row and column!");
-    return;
-  }
-
-  var n, m;
-  var weight;
-  for (var i = 0; i < 3; ++i) {
-    for (var j = 0; j < 3; ++j) {
-      var reset = game.putO(i, j);
-      var newWeight = game.calculateWeight("O");
-      if (typeof (weight) == "undefined" || newWeight > weight) {
-        weight = newWeight;
-        n = i;
-        m = j;
-      }
-
-      if (reset) {
-        game.reset(i, j);
-      }
-    }
-  }
-
-  game.putO(n, m);
-  game.printBoard();
-  console.log("");
-
-  if (game.isGameOver()) {
-    console.log("Game over!!!");
-    process.exit();
-  }
-
-});
+// var stdin = process.openStdin();
+// stdin.addListener("data", function(d) {
+//   var inputString = d.toString().trim();
+//   var row = inputString.split(" ")[0];
+//   var column = inputString.split(" ")[1];
+//   var set = game.putX(row, column);
+//
+//   if (!set) {
+//     console.log("Row and column were not free. Enter new row and column!");
+//     return;
+//   }
+//
+//   var n, m;
+//   var weight;
+//   for (var i = 0; i < 3; ++i) {
+//     for (var j = 0; j < 3; ++j) {
+//       var reset = game.putO(i, j);
+//       var newWeight = game.calculateWeight("O");
+//       if (typeof (weight) == "undefined" || newWeight > weight) {
+//         weight = newWeight;
+//         n = i;
+//         m = j;
+//       }
+//
+//       if (reset) {
+//         game.reset(i, j);
+//       }
+//     }
+//   }
+//
+//   game.putO(n, m);
+//   game.printBoard();
+//   console.log("");
+//
+//   if (game.isGameOver()) {
+//     console.log("Game over!!!");
+//     process.exit();
+//   }
+//
+// });
