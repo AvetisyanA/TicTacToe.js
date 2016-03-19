@@ -20,6 +20,7 @@ function Board() {
   }
 
   function get(i, j) {
+    // console.log(board);
     return board[i][j];
   }
 
@@ -201,63 +202,39 @@ function TicTacToe() {
 
   function printBoard() {
     for (var i = 0; i < 3; ++i) {
-      var gameLog = "";
+      var art = "";
       for (var j = 0; j < 3; ++j) {
         if (board.isEmpty(i, j)) {
-          gameLog += "*" + "  ";
+          art += "*" + "  ";
         }
         else {
-          gameLog += board.get(i, j) + "  ";
+          art += board.get(i, j) + "  ";
         }
       }
+      console.log(art);
     }
   }
 
+  function getElement(i, j) {
+    return board.get(i, j);
+  }
+
+  function isX(i, j) {
+    return getElement(i, j) === "X";
+  }
+
+  function isO(i, j) {
+    return getElement(i, j) === "O";
+  }
+
+  this.getBoardSize = function() { return 3; }
   this.reset = reset;
   this.putX = putX;
   this.putO = putO;
   this.calculateWeight = calculateWeight;
   this.printBoard = printBoard;
   this.isGameOver = isGameOver;
+  this.isX = isX;
+  this.isO = isO;
+  this.getElement = getElement;
 }
-
-// var stdin = process.openStdin();
-// stdin.addListener("data", function(d) {
-//   var inputString = d.toString().trim();
-//   var row = inputString.split(" ")[0];
-//   var column = inputString.split(" ")[1];
-//   var set = game.putX(row, column);
-//
-//   if (!set) {
-//     console.log("Row and column were not free. Enter new row and column!");
-//     return;
-//   }
-//
-//   var n, m;
-//   var weight;
-//   for (var i = 0; i < 3; ++i) {
-//     for (var j = 0; j < 3; ++j) {
-//       var reset = game.putO(i, j);
-//       var newWeight = game.calculateWeight("O");
-//       if (typeof (weight) == "undefined" || newWeight > weight) {
-//         weight = newWeight;
-//         n = i;
-//         m = j;
-//       }
-//
-//       if (reset) {
-//         game.reset(i, j);
-//       }
-//     }
-//   }
-//
-//   game.putO(n, m);
-//   game.printBoard();
-//   console.log("");
-//
-//   if (game.isGameOver()) {
-//     console.log("Game over!!!");
-//     process.exit();
-//   }
-//
-// });
