@@ -8,17 +8,24 @@
 
   document.addEventListener("DOMContentLoaded", function(event) {
     var newGameButton = document.getElementById("new-game-button");
+    var newGameDialogButton = document.getElementById("new-game-dialog-button");
     var gameBoard = document.getElementsByClassName("game-board")[0];
     newGameButton.addEventListener("click", onNewGame);
+    newGameDialogButton.addEventListener("click", onNewGame);
     gameBoard.addEventListener("click", onGameEvent);
   });
 
   function onNewGame() {
     game = new TicTacToe();
     updateBoard();
+    gameOver(false);
   }
 
   function onGameEvent(eventArgument) {
+    if (game.isGameOver()) {
+      return;
+    }
+
     var gameRows = document.getElementsByClassName("game-row");
     for (var i = 0; i < gameRows.length; i++) {
       var rowDiv = gameRows[i];
@@ -28,8 +35,18 @@
             return;
           }
 
+          if (game.isGameOver()) {
+            updateBoard();
+            gameOver(true);
+            return;
+          }
+
           aiGameMove();
           updateBoard();
+          if (game.isGameOver()) {
+            gameOver(true);
+          }
+
           return;
         }
       }
@@ -42,15 +59,14 @@
       var weight;
       for (var i = 0; i < game.getBoardSize(); ++i) {
         for (var j = 0; j < game.getBoardSize(); ++j) {
-          var reset = game.putO(i, j);
-          if (reset) {
+          var needReset = game.putO(i, j);
+          if (needReset) {
             var newWeight = game.calculateWeight("O");
             if (typeof (weight) == "undefined" || newWeight > weight) {
               weight = newWeight;
               n = i;
               m = j;
             }
-
             game.reset(i, j);
           }
         }
@@ -78,6 +94,11 @@
           }
       }
     }
+  }
+
+  function gameOver(show) {
+    var gameOverPanel = document.getElementById("game-over-panel");
+    gameOverPanel.className = show ? "show-panel" : "";
   }
 
 })(TicTacToe);
