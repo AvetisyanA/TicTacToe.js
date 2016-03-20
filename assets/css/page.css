@@ -35,7 +35,7 @@
   height: 50px;
 }
 
-#new-game-dialog {
+#new-game-button {
   width: 80px;
   height: 40px;
   font-family: sans-serif;
@@ -48,11 +48,11 @@
   box-shadow: 3px 3px 5px grey;
 }
 
-#new-game-dialog:focus {
+#new-game-button:focus {
   outline: none;
 }
 
-#new-game-dialog:active {
+#new-game-button:active {
   margin-top: 1px;
   box-shadow: 1px 1px 1px #dfdfdf;
 }
@@ -62,7 +62,7 @@
   position: absolute;
   padding: 10px;
   border-radius: 8px;
-  background-color: #dfdfdf;
+  background-color: #bdbdbd;
   top: 30%;
   left: 15%;
   width: 200px;
@@ -70,6 +70,7 @@
   text-align: center;
   border: solid green 2px;
   box-shadow: 5px 5px 5px grey;
+  z-index: 1;
 }
 
 #game-over-panel p {
